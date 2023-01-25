@@ -2,15 +2,24 @@ let activeObject;
 
 let books;
 
+let bookSound1;
+let bookSound2;
+
+function preload() {
+    soundFormats("mp3");
+    bookSound1 = loadSound("sounds/closing-a-book-1.mp3");
+    bookSound2 = loadSound("sounds/closing-a-book-2.mp3");
+}
+
 function setup() {
-    createCanvas(1200, 800);
+    createCanvas(1440, 960);
 
     center = createVector(width/2, height/2);
 
     pallete = new Pallete();
     pallete.init();
 
-    bkg_color = color(0, 128, 128);
+    bkg_color = color(100, 200, 200);
 
     books = new Books(center.x, center.y, 7);
     books.init();
@@ -31,13 +40,20 @@ function draw() {
 function keyPressed() {
 }
 
+function mousePressed() {
+    books.handleMousePressed();
+    return false;
+}
+
 function mouseDragged() {
     let delta = getMouseMoved();
     books.handleDrag(delta);
+    return false;
 }
 
 function mouseReleased() {
     books.handleMouseReleased();
+    return false;
 }
 
 function getMousePos() {
@@ -115,5 +131,14 @@ function getCenteredBoundingBox(vec, w, h) {
         r: vec.x + hw,
         b: vec.y + hh,
         l: vec.x - hw
+    }
+}
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
     }
 }
