@@ -9,6 +9,7 @@ class Cans {
         this.canHeight = Math.trunc(this.colHeight/this.maxCansPerColumn);
         this.columns = [];
         this.activeCan = null;
+        this.dragOccurred = false;
         let FOOD = new Category("food", color(255, 0, 0, 128));
         let HAIR = new Category("hair", color(255, 255, 0, 128));
         let MINT = new Category("mint", color(0, 255, 128, 128));
@@ -46,6 +47,8 @@ class Cans {
     }
 
     handleMousePressed() {
+        if (this.activeCan)
+            canSound1.play();
     }
 
     handleMouseReleased() {
@@ -78,12 +81,16 @@ class Cans {
             }
             if (!handled)
                 this.activeCan.pos.set(this.activeCan.original_pos);
+            if (this.dragOccurred)
+                canSound2.play();
+            this.dragOccurred = false;
         }
     }
 
     handleDrag(delta) {
         if (this.activeCan) {
             this.activeCan.handleDrag(delta);
+            this.dragOccurred = this.original_pos !== this.pos;
         }
     }
 

@@ -5,12 +5,14 @@ let cans;
 // let bookSound2;
 
 let canSound1;
+let canSound2;
 
 function preload() {
     soundFormats("mp3");
     // bookSound1 = loadSound("sounds/closing-a-book-1.mp3");
     // bookSound2 = loadSound("sounds/closing-a-book-2.mp3");
-    // canSound1 = loadSound("");
+    canSound1 = loadSound("sounds/glass-1.mp3");
+    canSound2 = loadSound("sounds/glass-1.mp3");
 }
 
 function setup() {
