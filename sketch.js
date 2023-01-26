@@ -1,16 +1,18 @@
-// let books;
-let cans;
+let levels;
+let level;
 
-// let bookSound1;
-// let bookSound2;
-
+let bookSound1;
+let bookSound2;
 let canSound1;
 let canSound2;
 
+let levelSelectTitle;
+let levelSelect;
+
 function preload() {
     soundFormats("mp3");
-    // bookSound1 = loadSound("sounds/closing-a-book-1.mp3");
-    // bookSound2 = loadSound("sounds/closing-a-book-2.mp3");
+    bookSound1 = loadSound("sounds/book-1.mp3");
+    bookSound2 = loadSound("sounds/book-2.mp3");
     canSound1 = loadSound("sounds/glass-1.mp3");
     canSound2 = loadSound("sounds/glass-1.mp3");
 }
@@ -25,11 +27,29 @@ function setup() {
 
     bkg_color = color(100, 200, 200);
 
-    // books = new Books(center.x, center.y, 7);
-    // books.init();
+    levels = ["books", "jars"];
 
-    cans = new Cans(center.x, center.y);
-    cans.init();
+    levelSelectTitle = createP("Select Level");
+    levelSelectTitle.style("fontFamily", "sans-serif");
+    levelSelectTitle.style("fontSize", "20px");
+    levelSelectTitle.position(12, 5);
+
+    levelSelect = createSelect();
+    levelSelect.style("padding", "10px");
+    levelSelect.style("width", "150px");
+    levelSelect.style("fontFamily", "sans-serif");
+    levelSelect.style("fontSize", "20px");
+    levelSelect.position(10, 50);
+    levelSelect.option("Books", "books");
+    levelSelect.option("Jars", "jars");
+    levelSelect.changed(() => {
+        let index = levels.indexOf(levelSelect.selected());
+        level = createLevel(levels[index]);
+        level.init();
+    });
+
+    level = createLevel(levels[0]);
+    level.init();
 }
 
 function draw() {
@@ -40,32 +60,26 @@ function draw() {
 
     let m = getMousePos();
 
-    // books.update(m);
-    // books.draw();
-
-    cans.update(m);
-    cans.draw();
+    level.update(m);
+    level.draw();
 }
 
 function keyPressed() {
 }
 
 function mousePressed() {
-    // books.handleMousePressed();
-    cans.handleMousePressed();
-    return false;
+    level.handleMousePressed();
+    // don't do a return false here because it will make any HTML elements not function
 }
 
 function mouseDragged() {
     let delta = getMouseMoved();
-    // books.handleDrag(delta);
-    cans.handleDrag(delta);
+    level.handleDrag(delta);
     return false;
 }
 
 function mouseReleased() {
-    // books.handleMouseReleased();
-    cans.handleMouseReleased();
+    level.handleMouseReleased();
     return false;
 }
 
@@ -164,4 +178,11 @@ function rgb_brightness(c) {
         green(c) * green(c) * .691 +
         blue(c) * blue(c) * .068
     );
+}
+
+function createLevel(levelName) {
+    switch (levelName) {
+        case "books": return new Books(center.x, center.y);
+        case "jars": return new Cans(center.x, center.y);
+    }
 }

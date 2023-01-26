@@ -1,10 +1,10 @@
 class Books {
-    constructor(x, y, count) {
+    constructor(x, y) {
         this.pos = createVector(x, y);
-        this.count = count;
+        this.count = 7;
         this.bookWidth = 100;
         this.bookHeight = 500;
-        this.padding = 10;
+        this.padding = 2;
         this.books = [];
         this.activeBook = null;
         this.dragOccurred = false;
