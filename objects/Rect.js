@@ -30,8 +30,6 @@ class Rect {
         stroke(this.hovered ? color(0, 255, 0) : "black");
         this.color ? fill(this.color) : noFill();
         rect(this.pos.x, this.pos.y, this.w, this.h);
-        fill("black");
-        circle(this.pos.x, this.pos.y, 30);
         pop();
     }
 }

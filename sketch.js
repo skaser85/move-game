@@ -142,3 +142,13 @@ function shuffleArray(array) {
         array[j] = temp;
     }
 }
+
+function rgb_brightness(c) {
+    // https://www.nbdtech.com/Blog/archive/2008/04/27/calculating-the-perceived-brightness-of-a-color.aspx
+    // stolen from the link above and then modified to work with how p5.js works with color
+    return Math.sqrt(
+        red(c) * red(c) * .241 +
+        green(c) * green(c) * .691 +
+        blue(c) * blue(c) * .068
+    );
+}

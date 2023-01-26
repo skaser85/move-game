@@ -17,15 +17,23 @@ class Books {
             color("#4b0082"),
             color("#8000DE")
         ]
+        this.titles = [
+            "The Terrifying Tales of Terror",
+            "Spooky Stories to Get Spooked By",
+            "Boo!",
+            "Things to Do With Leftover Ham",
+            "*Slaps Bookshelf*",
+            "This Baby Can Hold So Many Books",
+            "The Dictionary"
+        ]
     }
 
     init() {
         let totalW = this.count * this.bookWidth + (this.padding * (this.count-1))
         let x = this.pos.x - totalW/2 + this.bookWidth/2;
         for (let i = 0; i < this.count; i++) {
-            // this.books.push(new Book(x, this.pos.y, this.bookWidth, this.bookHeight, this.colors[i], i+1));
             let bh = random(400, this.bookHeight)
-            this.books.push(new Book(x, this.pos.y + this.bookHeight/2 - bh/2, this.bookWidth, bh, this.colors[i], i+1));
+            this.books.push(new Book(x, this.pos.y + this.bookHeight/2 - bh/2, this.bookWidth, bh, this.colors[i], i+1, this.titles[i]));
             x += this.bookWidth + this.padding;
         }
         shuffleArray(this.books);
@@ -53,13 +61,14 @@ class Books {
             this.repositionBooks();
             bookSound1.play();
             this.dragOccurred = false;
+            this.original_pos = this.pos.copy();
         }
     }
 
     handleDrag(delta) {
         if (this.activeBook) {
-            this.dragOccurred = delta.mag() ? true : false;
             this.activeBook.handleDrag(delta);
+            this.dragOccurred = this.original_pos !== this.pos;
         }
     }
 
@@ -100,54 +109,32 @@ class Books {
 }
 
 class Book extends Rect {
-    constructor(x, y, w, h, _color, order) {
+    constructor(x, y, w, h, _color, order, title) {
         super(x, y, w, h)
         this.color = _color;
         this.order = order;
+        this.title = title;
+        this.original_pos = this.pos.copy();
         this.original_w = w;
         this.original_h = h;
+        this.textColor = rgb_brightness(_color) < 128 ? "white" : "black";
     }
 
     handleDrag(delta) {
         this.pos.x += delta.x;
     }
 
-    update(m, books) {
-        super.update(m);
-
-        // if (this.hovered) {
-        //     books = books.filter(b => b !== this);
-        //     for (let book of books) {
-        //         let d = p5.Vector.dist(this.pos, book.pos);
-        //         if (d < (this.w/2 + book.w/2)) {
-        //             push();
-        //             stroke(color("red"));
-        //             strokeWeight(5);
-        //             line(this.pos.x, this.pos.y, book.pos.x, book.pos.y);
-        //             pop();
-        //         }
-        //     }
-        // }
-    }
-
     draw() {
-        // if (this.hovered) {
-        //     this.w = this.original_w * 1.1;
-        //     this.h = this.original_h * 1.1;
-        // } else {
-        //     this.w = this.original_w;
-        //     this.h = this.original_h;
-        // }
-
         super.draw();
 
         push();
+        translate(this.pos.x, this.pos.y);
+        rotate(PI/2);
         textAlign(CENTER, CENTER);
-        textSize(32);
+        textSize(18);
         textStyle(BOLD);
-        text(this.order, this.pos.x, this.pos.y - 50);
-        textSize(12);
-        text(Math.trunc(this.original_h), this.pos.x, this.pos.y - 75);
+        fill(this.textColor);
+        text(this.title, 0, 0);
         pop();
     }
 }
