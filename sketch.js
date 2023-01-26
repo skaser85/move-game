@@ -1,14 +1,16 @@
-let activeObject;
+// let books;
+let cans;
 
-let books;
+// let bookSound1;
+// let bookSound2;
 
-let bookSound1;
-let bookSound2;
+let canSound1;
 
 function preload() {
     soundFormats("mp3");
-    bookSound1 = loadSound("sounds/closing-a-book-1.mp3");
-    bookSound2 = loadSound("sounds/closing-a-book-2.mp3");
+    // bookSound1 = loadSound("sounds/closing-a-book-1.mp3");
+    // bookSound2 = loadSound("sounds/closing-a-book-2.mp3");
+    // canSound1 = loadSound("");
 }
 
 function setup() {
@@ -21,8 +23,11 @@ function setup() {
 
     bkg_color = color(100, 200, 200);
 
-    books = new Books(center.x, center.y, 7);
-    books.init();
+    // books = new Books(center.x, center.y, 7);
+    // books.init();
+
+    cans = new Cans(center.x, center.y);
+    cans.init();
 }
 
 function draw() {
@@ -33,26 +38,32 @@ function draw() {
 
     let m = getMousePos();
 
-    books.update(m);
-    books.draw();
+    // books.update(m);
+    // books.draw();
+
+    cans.update(m);
+    cans.draw();
 }
 
 function keyPressed() {
 }
 
 function mousePressed() {
-    books.handleMousePressed();
+    // books.handleMousePressed();
+    cans.handleMousePressed();
     return false;
 }
 
 function mouseDragged() {
     let delta = getMouseMoved();
-    books.handleDrag(delta);
+    // books.handleDrag(delta);
+    cans.handleDrag(delta);
     return false;
 }
 
 function mouseReleased() {
-    books.handleMouseReleased();
+    // books.handleMouseReleased();
+    cans.handleMouseReleased();
     return false;
 }
 
