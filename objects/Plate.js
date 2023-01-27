@@ -26,6 +26,12 @@ class Plate extends Level {
             new BlueberryTarget(0, 0, this.blueberryR, 0, this.toastDim/2 + this.blueberryR),
             new BlueberryTarget(0, 0, this.blueberryR, 90, this.toastDim/2 + this.blueberryR),
             new BlueberryTarget(0, 0, this.blueberryR, 180, this.toastDim/2 + this.blueberryR)
+        ];
+        this.orangeSliceTargets = [
+            new OrangeSliceTarget(0, 0, this.orangeW, this.orangeH, -90, this.plateR/2 - this.orangeH * 0.75),
+            new OrangeSliceTarget(0, 0, this.orangeW, this.orangeH, 0, this.plateR/2 - this.orangeH * 0.75),
+            new OrangeSliceTarget(0, 0, this.orangeW, this.orangeH, 90, this.plateR/2 - this.orangeH * 0.75),
+            new OrangeSliceTarget(0, 0, this.orangeW, this.orangeH, 180, this.plateR/2 - this.orangeH * 0.75),
         ]
         
         // food
@@ -48,6 +54,9 @@ class Plate extends Level {
         for (let i = 0; i < this.blueberryTargets.length; i++) {
             this.blueberries.push(new Blueberry(random(width), random(height), this.blueberryR));
         }
+        for (let i = 0; i < this.orangeSliceTargets.length; i++) {
+            this.orangeSlices.push(new OrangeSlice(random(width), random(height), this.orangeW, this.orangeH));
+        }
     }
 
     handleMouseReleased() {
@@ -65,15 +74,17 @@ class Plate extends Level {
                 for (let st of this.strawberryTargets) {
                     if (this.activeFood.collidesRect(st)) {
                         let d = p5.Vector.dist(this.activeFood.pos, st.pos);
-                        if (d < this.strawberryDim/2)
+                        if (d < this.strawberryDim/2) {
                             this.activeFood.pos.set(st.pos.copy());
+                            this.activeFood.angle = st.angle;
+                        }
                     }
                 }
             } else if (this.blueberries.includes(this.activeFood)) {
                 for (let bt of this.blueberryTargets) {
                     if (this.activeFood.collidesEllipse(bt)) {
                         let d = p5.Vector.dist(this.activeFood.pos, bt.pos);
-                        if (d < this.blueberryR/2)
+                        if (d < this.blueberryR)
                             this.activeFood.pos.set(bt.pos.copy());
                     }
                 }
@@ -87,6 +98,19 @@ class Plate extends Level {
                     }
                 }
                 this.eggTarget.pos.sub(_center);
+            } else if (this.orangeSlices.includes(this.activeFood)) {
+                for (let ot of this.orangeSliceTargets) {
+                    ot.pos.add(_center);
+                    if (this.activeFood.collidesRect(ot)) {
+                        let d = p5.Vector.dist(this.activeFood.pos, ot.pos);
+                        if (d < this.orangeW/2) {
+                            // console.log(ot.angle);
+                            this.activeFood.pos.set(ot.pos.copy());
+                            this.activeFood.angle = ot.angle;
+                        }
+                    }
+                    ot.pos.sub(_center);
+                }
             }
         }
     }
@@ -129,6 +153,14 @@ class Plate extends Level {
                     this.activeFood = b;
             }
         }
+
+        if (!this.activeFood) {
+            for (let o of this.orangeSlices) {
+                o.update(m);
+                if (o.hovered && !this.activeFood)
+                    this.activeFood = o;
+            }
+        }
     }
 
     draw() {
@@ -140,20 +172,12 @@ class Plate extends Level {
         circle(0, 0, this.plateR);
         pop();
 
-        
-        // draw orange slices targets
+        // draw the orange slices targets
         push();
         translate(this.pos.x, this.pos.y);
-        noFill();
-        rectMode(CENTER);
-        rect(0, -this.plateR/2 + this.orangeH * 0.75, this.orangeW, this.orangeH, this.orangeH, this.orangeH, 0, 0);
-        rotate(PI/2);
-        rect(0, -this.plateR/2 + this.orangeH * 0.75, this.orangeW, this.orangeH, this.orangeH, this.orangeH, 0, 0);
-        rotate(PI/2);
-        rect(0, -this.plateR/2 + this.orangeH * 0.75, this.orangeW, this.orangeH, this.orangeH, this.orangeH, 0, 0);
-        rotate(PI/2);
-        rect(0, -this.plateR/2 + this.orangeH * 0.75, this.orangeW, this.orangeH, this.orangeH, this.orangeH, 0, 0);
-        rotate(PI/2); // complete the rotation so we're back to facing up
+        for (let o of this.orangeSliceTargets) {
+            o.draw();
+        }
         pop();
 
         // draw toast target
@@ -194,6 +218,12 @@ class Plate extends Level {
                 b.draw();
         }
 
+        // draw orange slices
+        for (let o of this.orangeSlices) {
+            if ((!this.activeFood) || (this.activeFood && this.activeFood !== o))
+                o.draw();
+        }
+
         // draw the egg
         if ((!this.activeFood) || (this.activeFood && this.activeFood !== this.egg))
             this.egg.draw();
@@ -227,6 +257,7 @@ class Toast extends Rect {
 class Strawberry extends Rect {
     constructor(x, y, w, h) {
         super(x, y, w, h);
+        this.angle = null;
     }
 
     handleDrag(delta) {
@@ -237,6 +268,8 @@ class Strawberry extends Rect {
         push();
         rectMode(CENTER);
         translate(this.pos.x, this.pos.y);
+        if (this.angle)
+            rotate(radians(this.angle) - PI/2 - PI);
         stroke(this.hovered ? color(0, 255, 0) : "black");
         fill("red");
         rect(0, 0, this.w, this.h);
@@ -251,13 +284,16 @@ class StrawberryTarget extends Rect {
     constructor(x, y, w, h, angle, len) {
         super(x, y, w, h);
         this.pos = p5.Vector.fromAngle(radians(angle), len).add(_center);
+        this.angle = angle;
     }
 
     draw() {
         push();
+        translate(this.pos.x, this.pos.y);
         rectMode(CENTER);
         noFill();
-        rect(this.pos.x, this.pos.y, this.w, this.h);
+        rotate(radians(this.angle) - PI/2);
+        rect(0, 0, this.w, this.h);
         pop();
     }
 }
@@ -303,5 +339,49 @@ class Egg extends Circle {
 class EggTarget extends Circle {
     constructor(x, y, r) {
         super(x, y, r);
+    }
+}
+
+class OrangeSlice extends Rect {
+    constructor(x, y, w, h) {
+        super(x, y, w, h);
+        this.angle = null;
+    }
+
+    handleDrag(delta) {
+        this.pos.add(delta);
+    }
+
+    draw() {
+        push();
+        rectMode(CENTER);
+        translate(this.pos.x, this.pos.y);
+        if (this.angle !== null)
+            rotate(radians(this.angle) - PI/2);
+        stroke(this.hovered ? color(0, 255, 0) : "black");
+        fill("#FA8128");
+        rect(0, 0, this.w, this.h, 0, 0, this.h, this.h);
+        noStroke();
+        fill("#ED7014");
+        rect(0, -this.h/2+this.h/8, this.w, this.h/4);
+        pop();
+    }
+}
+
+class OrangeSliceTarget extends Rect {
+    constructor(x, y, w, h, angle, len) {
+        super(x, y, w, h);
+        this.pos = p5.Vector.fromAngle(radians(angle), len);
+        this.angle = angle;
+    }
+
+    draw() {
+        push();
+        translate(this.pos.x, this.pos.y);
+        rectMode(CENTER);
+        noFill();
+        rotate(radians(this.angle) - PI/2);
+        rect(0, 0, this.w, this.h, 0, 0, this.h, this.h);
+        pop();
     }
 }
