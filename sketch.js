@@ -115,6 +115,11 @@ function collidesPointEllipse(p, ex, ey, r) {
     return d <= r;
 }
 
+function collidesEllipseEllipse(e1, e2, r1, r2) {
+    let d = p5.Vector.dist(e1, e2);
+    return d < r1 + r2;
+}
+
 function collidesRectPoint(rbb, p) {
     return ((p.x >= rbb.l) && (p.x <= rbb.r)) &&
            ((p.y >= rbb.t) && (p.y <= rbb.b));

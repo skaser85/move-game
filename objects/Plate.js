@@ -10,7 +10,7 @@ class Plate extends Level {
         this.toastDim = this.plateR * 0.45;
         this.eggR = this.plateR * 0.35;
         this.strawberryDim = this.plateR * 0.1;
-        this.blueberryR = this.plateR * 0.075;
+        this.blueberryR = this.plateR * 0.075/2;
 
         // targets
         this.toastTarget = new Rect(0, 0, this.toastDim, this.toastDim);
@@ -20,6 +20,12 @@ class Plate extends Level {
             new StrawberryTarget(0, 0, this.strawberryDim, this.strawberryDim, 135, this.plateR/2 - this.strawberryDim*0.8),
             new StrawberryTarget(0, 0, this.strawberryDim, this.strawberryDim, 225, this.plateR/2 - this.strawberryDim*0.8)
         ];
+        this.blueberryTargets = [
+            new BlueberryTarget(0, 0, this.blueberryR, -90, this.toastDim/2 + this.blueberryR),
+            new BlueberryTarget(0, 0, this.blueberryR, 0, this.toastDim/2 + this.blueberryR),
+            new BlueberryTarget(0, 0, this.blueberryR, 90, this.toastDim/2 + this.blueberryR),
+            new BlueberryTarget(0, 0, this.blueberryR, 180, this.toastDim/2 + this.blueberryR)
+        ]
         
         // food
         this.orangeSlices = [];
@@ -36,6 +42,9 @@ class Plate extends Level {
         this.toast = new Toast(random(width), random(height), this.toastDim, this.toastDim);
         for (let i = 0; i < this.strawberryTargets.length; i++) {
             this.strawberries.push(new Strawberry(random(width), random(height), this.strawberryDim, this.strawberryDim));
+        }
+        for (let i = 0; i < this.blueberryTargets.length; i++) {
+            this.blueberries.push(new Blueberry(random(width), random(height), this.blueberryR));
         }
     }
 
@@ -56,6 +65,14 @@ class Plate extends Level {
                         let d = p5.Vector.dist(this.activeFood.pos, st.pos);
                         if (d < this.strawberryDim/2)
                             this.activeFood.pos.set(st.pos.copy());
+                    }
+                }
+            } else if (this.blueberries.includes(this.activeFood)) {
+                for (let bt of this.blueberryTargets) {
+                    if (this.activeFood.collidesEllipse(bt)) {
+                        let d = p5.Vector.dist(this.activeFood.pos, bt.pos);
+                        if (d < this.blueberryR/2)
+                            this.activeFood.pos.set(bt.pos.copy());
                     }
                 }
             }
@@ -84,6 +101,14 @@ class Plate extends Level {
                 s.update(m);
                 if (s.hovered && !this.activeFood)
                     this.activeFood = s;
+            }
+        }
+
+        if (!this.activeFood) {
+            for (let b of this.blueberries) {
+                b.update(m);
+                if (b.hovered && !this.activeFood)
+                    this.activeFood = b;
             }
         }
     }
@@ -132,26 +157,39 @@ class Plate extends Level {
         }
         
         // draw the blueberry targets
-        push();
-        translate(this.pos.x, this.pos.y);
-        noFill();
-        circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
-        rotate(PI/2);
-        circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
-        rotate(PI/2);
-        circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
-        rotate(PI/2);
-        circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
-        rotate(PI/2); // complete the rotation so we're back to facing up
-        pop();
+        // push();
+        // translate(this.pos.x, this.pos.y);
+        // noFill();
+        // circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
+        // rotate(PI/2);
+        // circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
+        // rotate(PI/2);
+        // circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
+        // rotate(PI/2);
+        // circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
+        // rotate(PI/2); // complete the rotation so we're back to facing up
+        // pop();
+        for (let bt of this.blueberryTargets) {
+            bt.draw();
+        }
 
+        // draw toast
         if ((!this.activeFood) || (this.activeFood && this.activeFood !== this.toast))
             this.toast.draw();
+        
+        // draw strawberries
         for (let s of this.strawberries) {
             if ((!this.activeFood) || (this.activeFood && this.activeFood !== s))
                 s.draw();
         }
 
+        // draw blueberries
+        for (let b of this.blueberries) {
+            if ((!this.activeFood) || (this.activeFood && this.activeFood !== b))
+                b.draw();
+        }
+
+        // draw activeFood if we have one
         if (this.activeFood)
             this.activeFood.draw();
     }
@@ -212,5 +250,23 @@ class StrawberryTarget extends Rect {
         noFill();
         rect(this.pos.x, this.pos.y, this.w, this.h);
         pop();
+    }
+}
+
+class Blueberry extends Circle {
+    constructor(x, y, r) {
+        super(x, y, r);
+        this.color = color("#4f86f7");
+    }
+
+    handleDrag(delta) {
+        this.pos.add(delta);
+    }
+}
+
+class BlueberryTarget extends Circle {
+    constructor(x, y, r, angle, len) {
+        super(x, y, r);
+        this.pos = p5.Vector.fromAngle(radians(angle), len).add(_center);
     }
 }
