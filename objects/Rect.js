@@ -9,15 +9,18 @@ class Rect {
     }
 
     getBoundingBox() {
-        return getCenteredBoundingBox(this.pos, this.w, this.h);
+        return get_centeredBoundingBox(this.pos, this.w, this.h);
     }
 
     collidesPoint(p) {
         return collidesRectPoint(this.getBoundingBox(), p);
     }
 
-    collidesRect(rbb) {
-        return collidesRectRect(this.getBoundingBox, rbb);
+    collidesRect(r) {
+        return this.pos.x < r.pos.x + r.w    &&
+               this.pos.x + this.w > r.pos.x &&
+               this.pos.y < r.pos.y + r.h    &&
+               this.pos.y + this.h > r.pos.y;
     }
 
     update(m) {

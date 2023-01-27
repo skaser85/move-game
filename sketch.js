@@ -20,43 +20,51 @@ function preload() {
 function setup() {
     createCanvas(1440, 960);
 
-    center = createVector(width/2, height/2);
+    _center = createVector(width/2, height/2);
 
     pallete = new Pallete();
     pallete.init();
 
     bkg_color = color(100, 200, 200);
 
-    levels = ["books", "jars"];
+    levels = ["books", "jars", "plate"];
 
     levelSelectTitle = createP("Select Level");
+    
     levelSelectTitle.style("fontFamily", "sans-serif");
     levelSelectTitle.style("fontSize", "20px");
+    levelSelectTitle.style("userSelect", "none");
+    
     levelSelectTitle.position(12, 5);
 
     levelSelect = createSelect();
+    
     levelSelect.style("padding", "10px");
     levelSelect.style("width", "150px");
     levelSelect.style("fontFamily", "sans-serif");
     levelSelect.style("fontSize", "20px");
+    
     levelSelect.position(10, 50);
+
     levelSelect.option("Books", "books");
     levelSelect.option("Jars", "jars");
+    levelSelect.option("Plate", "plate");
+    
     levelSelect.changed(() => {
         let index = levels.indexOf(levelSelect.selected());
         level = createLevel(levels[index]);
         level.init();
     });
 
-    level = createLevel(levels[0]);
+    level = createLevel("plate");
     level.init();
 }
 
 function draw() {
     background(bkg_color);
 
-    line(center.x, 0, center.x, height);
-    line(0, center.y, width, center.y);
+    line(_center.x, 0, _center.x, height);
+    line(0, _center.y, width, _center.y);
 
     let m = getMousePos();
 
@@ -150,7 +158,7 @@ function getBoundingBox(vec, w, h) {
     }
 }
 
-function getCenteredBoundingBox(vec, w, h) {
+function get_centeredBoundingBox(vec, w, h) {
     let hw = w/2;
     let hh = h/2;
     return {
@@ -182,7 +190,8 @@ function rgb_brightness(c) {
 
 function createLevel(levelName) {
     switch (levelName) {
-        case "books": return new Books(center.x, center.y);
-        case "jars": return new Cans(center.x, center.y);
+        case "books": return new Books(_center.x, _center.y);
+        case "jars": return new Cans(_center.x, _center.y);
+        case "plate": return new Plate(_center.x, _center.y);
     }
 }

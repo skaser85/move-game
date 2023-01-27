@@ -1,5 +1,6 @@
-class Books {
+class Books extends Level {
     constructor(x, y) {
+        super();
         this.pos = createVector(x, y);
         this.count = 7;
         this.bookWidth = 100;
@@ -88,10 +89,10 @@ class Books {
 
         push();
         let totalW = this.count * this.bookWidth + (this.padding * (this.count-1))
-        let x = center.x - totalW/2;
+        let x = _center.x - totalW/2;
         stroke("red");
         noFill();
-        rect(x, center.y - this.bookHeight/2, totalW, this.bookHeight);
+        rect(x, _center.y - this.bookHeight/2, totalW, this.bookHeight);
         pop();
 
         for (let book of this.books) {
@@ -130,7 +131,7 @@ class Book extends Rect {
         push();
         translate(this.pos.x, this.pos.y);
         rotate(PI/2);
-        textAlign(CENTER, CENTER);
+        textAlign(_center, _center);
         textSize(18);
         textStyle(BOLD);
         fill(this.textColor);
