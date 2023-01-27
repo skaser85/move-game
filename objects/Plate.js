@@ -34,7 +34,9 @@ class Plate extends Level {
 
     init() {
         this.toast = new Toast(random(width), random(height), this.toastDim, this.toastDim);
-        this.strawberries.push(new Strawberry(random(width), random(height), this.strawberryDim, this.strawberryDim));
+        for (let i = 0; i < this.strawberryTargets.length; i++) {
+            this.strawberries.push(new Strawberry(random(width), random(height), this.strawberryDim, this.strawberryDim));
+        }
     }
 
     handleMouseReleased() {
@@ -191,6 +193,7 @@ class Strawberry extends Rect {
         stroke(this.hovered ? color(0, 255, 0) : "black");
         fill("red");
         rect(0, 0, this.w, this.h);
+        noStroke();
         fill(0, 200, 0);
         rect(0, -this.h/2+this.h/8, this.w, this.h/4);
         pop();
