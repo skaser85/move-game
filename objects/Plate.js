@@ -14,6 +14,7 @@ class Plate extends Level {
 
         // targets
         this.toastTarget = new Rect(0, 0, this.toastDim, this.toastDim);
+        this.eggTarget = new EggTarget(0, 0, this.eggR/2);
         this.strawberryTargets = [
             new StrawberryTarget(0, 0, this.strawberryDim, this.strawberryDim, -45, this.plateR/2 - this.strawberryDim*0.8),
             new StrawberryTarget(0, 0, this.strawberryDim, this.strawberryDim, 45, this.plateR/2 - this.strawberryDim*0.8),
@@ -40,6 +41,7 @@ class Plate extends Level {
 
     init() {
         this.toast = new Toast(random(width), random(height), this.toastDim, this.toastDim);
+        this.egg = new Egg(random(width), random(height), this.eggR/2);
         for (let i = 0; i < this.strawberryTargets.length; i++) {
             this.strawberries.push(new Strawberry(random(width), random(height), this.strawberryDim, this.strawberryDim));
         }
@@ -75,6 +77,16 @@ class Plate extends Level {
                             this.activeFood.pos.set(bt.pos.copy());
                     }
                 }
+            } else if (this.activeFood === this.egg) {
+                this.eggTarget.pos.add(_center);
+                if (this.activeFood.collidesEllipse(this.eggTarget)) {
+                    let d = p5.Vector.dist(this.activeFood.pos, this.eggTarget.pos);
+                    if (d < this.eggR/2) {
+                        this.activeFood.pos.set(this.eggTarget.pos.copy());
+                        this.activeFood.yolk.pos.set(this.eggTarget.pos.copy());
+                    }
+                }
+                this.eggTarget.pos.sub(_center);
             }
         }
     }
@@ -94,6 +106,12 @@ class Plate extends Level {
             this.toast.update(m);
             if (this.toast.hovered)
                 this.activeFood = this.toast;
+        }
+
+        if (!this.activeFood) {
+            this.egg.update(m);
+            if (this.egg.hovered)
+                this.activeFood = this.egg;
         }
 
         if (!this.activeFood) {
@@ -146,9 +164,8 @@ class Plate extends Level {
         
         // draw egg target
         push();
-        noFill();
         translate(this.pos.x, this.pos.y);
-        circle(0, 0, this.eggR);
+        this.eggTarget.draw();
         pop();
         
         // draw strawberry targets
@@ -157,18 +174,6 @@ class Plate extends Level {
         }
         
         // draw the blueberry targets
-        // push();
-        // translate(this.pos.x, this.pos.y);
-        // noFill();
-        // circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
-        // rotate(PI/2);
-        // circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
-        // rotate(PI/2);
-        // circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
-        // rotate(PI/2);
-        // circle(0, -this.toastDim/2 - this.blueberryR/2, this.blueberryR);
-        // rotate(PI/2); // complete the rotation so we're back to facing up
-        // pop();
         for (let bt of this.blueberryTargets) {
             bt.draw();
         }
@@ -188,6 +193,10 @@ class Plate extends Level {
             if ((!this.activeFood) || (this.activeFood && this.activeFood !== b))
                 b.draw();
         }
+
+        // draw the egg
+        if ((!this.activeFood) || (this.activeFood && this.activeFood !== this.egg))
+            this.egg.draw();
 
         // draw activeFood if we have one
         if (this.activeFood)
@@ -268,5 +277,31 @@ class BlueberryTarget extends Circle {
     constructor(x, y, r, angle, len) {
         super(x, y, r);
         this.pos = p5.Vector.fromAngle(radians(angle), len).add(_center);
+    }
+}
+
+class Egg extends Circle {
+    constructor(x, y, r) {
+        super(x, y, r);
+        this.color = color("white");
+        this.yolk = new Circle(x, y, r * 0.5);
+        this.yolk.color = color(255, 175, 0);
+    }
+
+    handleDrag(delta) {
+        this.pos.add(delta);
+        this.yolk.pos.add(delta);
+    }
+
+    draw() {
+        super.draw();
+
+        this.yolk.draw();
+    }
+}
+
+class EggTarget extends Circle {
+    constructor(x, y, r) {
+        super(x, y, r);
     }
 }
