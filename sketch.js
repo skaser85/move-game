@@ -5,6 +5,8 @@ let bookSound1;
 let bookSound2;
 let canSound1;
 let canSound2;
+let slurp1;
+let slurp2;
 
 let levelSelectTitle;
 let levelSelect;
@@ -15,6 +17,8 @@ function preload() {
     bookSound2 = loadSound("sounds/book-2.mp3");
     canSound1 = loadSound("sounds/glass-1.mp3");
     canSound2 = loadSound("sounds/glass-1.mp3");
+    slurp1 = loadSound("sounds/slurp-1.mp3");
+    slurp2 = loadSound("sounds/slurp-2.mp3");
 }
 
 function setup() {
@@ -56,7 +60,7 @@ function setup() {
         level.init();
     });
 
-    level = createLevel("plate");
+    level = createLevel(levels[0]);
     level.init();
 }
 
@@ -163,7 +167,7 @@ function getBoundingBox(vec, w, h) {
     }
 }
 
-function get_centeredBoundingBox(vec, w, h) {
+function getCenteredBoundingBox(vec, w, h) {
     let hw = w/2;
     let hh = h/2;
     return {

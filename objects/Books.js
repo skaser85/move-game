@@ -131,7 +131,7 @@ class Book extends Rect {
         push();
         translate(this.pos.x, this.pos.y);
         rotate(PI/2);
-        textAlign(_center, _center);
+        textAlign(CENTER, CENTER);
         textSize(18);
         textStyle(BOLD);
         fill(this.textColor);

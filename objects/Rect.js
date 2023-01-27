@@ -9,7 +9,7 @@ class Rect {
     }
 
     getBoundingBox() {
-        return get_centeredBoundingBox(this.pos, this.w, this.h);
+        return getCenteredBoundingBox(this.pos, this.w, this.h);
     }
 
     collidesPoint(p) {

@@ -59,6 +59,11 @@ class Plate extends Level {
         }
     }
 
+    handleMousePressed() {
+        if (this.activeFood)
+            slurp1.play();
+    }
+
     handleMouseReleased() {
         if (this.activeFood) {
             if (this.activeFood === this.toast) {
@@ -112,6 +117,7 @@ class Plate extends Level {
                     ot.pos.sub(_center);
                 }
             }
+            slurp2.play();
         }
     }
 

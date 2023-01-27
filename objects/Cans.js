@@ -128,7 +128,7 @@ class Column {
     }
 
     getBoundingBox() {
-        return get_centeredBoundingBox(this.pos, this.w, this.h);
+        return getCenteredBoundingBox(this.pos, this.w, this.h);
     }
 
     initCans(amount, products) {
@@ -217,7 +217,7 @@ class Can extends Rect {
         fill(color(200, 255));
         rect(this.pos.x, this.pos.y - this.h/2 + this.h/10, this.w, this.h/5, 0, 0, 20, 20);
         push();
-        textAlign(_center, _center);
+        textAlign(CENTER, CENTER);
         textSize(20);
         stroke("blue");
         fill("black");
