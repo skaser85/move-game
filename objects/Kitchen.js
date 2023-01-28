@@ -42,7 +42,8 @@ class Kitchen extends Level {
     }
 
     handleMousePressed() {
-
+        if (this.activeUtensil)
+            this.activeUtensil.handleMousePressed();
     }
 
     handleMouseReleased() {
@@ -206,6 +207,10 @@ class UtensilFlipped extends Img {
         this.hovered = this.handle.hovered;
     }
 
+    handleMousePressed() {
+        kitchen1.play();
+    }
+
     handleDrag(delta) {
         this.pos.add(delta);
         this.handle.handleDrag(delta);
@@ -216,6 +221,8 @@ class UtensilFlipped extends Img {
             let delta = p5.Vector.sub(this.target.peg.pos, this.handle.hole.pos);
             this.handleDrag(delta);
         }
+
+        kitchen2.play();
     }
 
     draw() {
@@ -262,6 +269,10 @@ class Utensil extends Img {
         this.target = target;
     }
 
+    handleMousePressed() {
+        knife1.play();
+    }
+
     handleDrag(delta) {
         this.pos.add(delta);
     }
@@ -277,6 +288,7 @@ class Utensil extends Img {
             }
             this.pos.set(pos);
         }
+        knife2.play();
     }
 
     collidesRect(r) {

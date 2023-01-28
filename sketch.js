@@ -13,6 +13,10 @@ let canSound1;
 let canSound2;
 let slurp1;
 let slurp2;
+let kitchen1;
+let kitchen2;
+let knife1;
+let knife2;
 
 // images
 let openSpatula;
@@ -44,6 +48,10 @@ function preload() {
     canSound2 = loadSound("sounds/glass-1.mp3");
     slurp1 = loadSound("sounds/slurp-1.mp3");
     slurp2 = loadSound("sounds/slurp-2.mp3");
+    kitchen1 = loadSound("sounds/kitchen-1.mp3");
+    kitchen2 = loadSound("sounds/kitchen-2.mp3");
+    knife1 = loadSound("sounds/knife-1.mp3");
+    knife2 = loadSound("sounds/knife-2.mp3");
 
     // images
     openSpatula = loadImage("images/kitchen/open-spatula.png");
