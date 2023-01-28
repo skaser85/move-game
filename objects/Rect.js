@@ -17,10 +17,13 @@ class Rect {
     }
 
     collidesRect(r) {
-        return this.pos.x < r.pos.x + r.w    &&
-               this.pos.x + this.w > r.pos.x &&
-               this.pos.y < r.pos.y + r.h    &&
-               this.pos.y + this.h > r.pos.y;
+        let bb = this.getBoundingBox();
+        let rbb = r.getBoundingBox();
+        return bb.l <= rbb.r &&
+               bb.r >= rbb.l &&
+               bb.t <= rbb.b &&
+               bb.b >= rbb.t;
+
     }
 
     update(m) {
@@ -29,10 +32,11 @@ class Rect {
 
     draw() {
         push();
+        translate(this.pos.x, this.pos.y);
         rectMode(CENTER);
         stroke(this.hovered ? color(0, 255, 0) : "black");
         this.color ? fill(this.color) : noFill();
-        rect(this.pos.x, this.pos.y, this.w, this.h);
+        rect(0, 0, this.w, this.h);
         pop();
     }
 }

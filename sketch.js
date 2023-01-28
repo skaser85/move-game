@@ -1,6 +1,12 @@
+// track what level we're on
 let levels;
 let level;
 
+// level title/select HTML elements
+let levelSelectTitle;
+let levelSelect;
+
+// sounds
 let bookSound1;
 let bookSound2;
 let canSound1;
@@ -8,11 +14,26 @@ let canSound2;
 let slurp1;
 let slurp2;
 
+// images
 let openSpatula;
 let whisk;
+let cookingFork;
+let ladel;
+let servingSpoon;
+let slottedSpatula;
+let spider;
+let cleaver;
+let chefsKnife1;
+let chefsKnife2;
+let paringKnife;
 
-let levelSelectTitle;
-let levelSelect;
+let cookingForkOutline;
+let ladelOutline;
+let openSpatulaOutline;
+let servingSpoonOutline;
+let slottedSpatulaOutline;
+let spiderOutline;
+let whiskOutline;
 
 function preload() {
     // sounds
@@ -27,6 +48,23 @@ function preload() {
     // images
     openSpatula = loadImage("images/kitchen/open-spatula.png");
     whisk = loadImage("images/kitchen/whisk.png");
+    cookingFork = loadImage("images/kitchen/cooking-fork.png");
+    ladel = loadImage("images/kitchen/ladel.png");
+    servingSpoon = loadImage("images/kitchen/serving-spoon.png");
+    slottedSpatula = loadImage("images/kitchen/slotted-spatula.png");
+    spider = loadImage("images/kitchen/spider.png");
+    cleaver = loadImage("images/kitchen/cleaver.png");
+    chefsKnife1 = loadImage("images/kitchen/chefs-knife-1.png");
+    chefsKnife2 = loadImage("images/kitchen/chefs-knife-2.png");
+    paringKnife = loadImage("images/kitchen/paring-knife.png");
+    
+    openSpatulaOutline = loadImage("images/kitchen/open-spatula-outline.png");
+    whiskOutline = loadImage("images/kitchen/whisk-outline.png");
+    cookingForkOutline = loadImage("images/kitchen/cooking-fork-outline.png");
+    ladelOutline = loadImage("images/kitchen/ladel-outline.png");
+    servingSpoonOutline = loadImage("images/kitchen/serving-spoon-outline.png");
+    slottedSpatulaOutline = loadImage("images/kitchen/slotted-spatula-outline.png");
+    spiderOutline = loadImage("images/kitchen/spider-outline.png");
 }
 
 function setup() {
@@ -69,7 +107,7 @@ function setup() {
         level.init();
     });
 
-    level = createLevel("kitchen");
+    level = createLevel(levels[0]);
     level.init();
 }
 
@@ -213,4 +251,8 @@ function createLevel(levelName) {
         case "plate": return new Plate(_center.x, _center.y);
         case "kitchen": return new Kitchen(_center.x, _center.y);
     }
+}
+
+function avgerageArray (arr) {
+    return arr.reduce((a, b) => a + b) / arr.length;
 }
