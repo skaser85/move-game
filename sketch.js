@@ -8,10 +8,14 @@ let canSound2;
 let slurp1;
 let slurp2;
 
+let openSpatula;
+let whisk;
+
 let levelSelectTitle;
 let levelSelect;
 
 function preload() {
+    // sounds
     soundFormats("mp3");
     bookSound1 = loadSound("sounds/book-1.mp3");
     bookSound2 = loadSound("sounds/book-2.mp3");
@@ -19,6 +23,10 @@ function preload() {
     canSound2 = loadSound("sounds/glass-1.mp3");
     slurp1 = loadSound("sounds/slurp-1.mp3");
     slurp2 = loadSound("sounds/slurp-2.mp3");
+
+    // images
+    openSpatula = loadImage("images/kitchen/open-spatula.png");
+    whisk = loadImage("images/kitchen/whisk.png");
 }
 
 function setup() {
@@ -31,7 +39,7 @@ function setup() {
 
     bkg_color = color(100, 200, 200);
 
-    levels = ["books", "jars", "plate"];
+    levels = ["books", "jars", "plate", "kitchen"];
 
     levelSelectTitle = createP("Select Level");
     
@@ -53,6 +61,7 @@ function setup() {
     levelSelect.option("Books", "books");
     levelSelect.option("Jars", "jars");
     levelSelect.option("Plate", "plate");
+    levelSelect.option("Kitchen", "kitchen");
     
     levelSelect.changed(() => {
         let index = levels.indexOf(levelSelect.selected());
@@ -60,7 +69,7 @@ function setup() {
         level.init();
     });
 
-    level = createLevel(levels[0]);
+    level = createLevel("kitchen");
     level.init();
 }
 
@@ -202,5 +211,6 @@ function createLevel(levelName) {
         case "books": return new Books(_center.x, _center.y);
         case "jars": return new Cans(_center.x, _center.y);
         case "plate": return new Plate(_center.x, _center.y);
+        case "kitchen": return new Kitchen(_center.x, _center.y);
     }
 }
