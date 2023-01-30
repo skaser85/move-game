@@ -281,7 +281,7 @@ class Utensil extends Img {
         if (this.collidesRect(this.target)) {
             let pos = createVector(0, 0);
             switch (this.image) {
-                case cleaver:     pos = createVector(this.target.pos.x - this.target.w/2 + this.target.w*0.2, this.target.pos.y); break;
+                case cleaver    : pos = createVector(this.target.pos.x - this.target.w/2 + this.target.w*0.2, this.target.pos.y); break;
                 case chefsKnife1: pos = createVector(this.target.pos.x - this.target.w/2 + this.target.w*0.4, this.target.pos.y); break;
                 case chefsKnife2: pos = createVector(this.target.pos.x - this.target.w/2 + this.target.w*0.6, this.target.pos.y); break;
                 case paringKnife: pos = createVector(this.target.pos.x - this.target.w/2 + this.target.w*0.8, this.target.pos.y); break;

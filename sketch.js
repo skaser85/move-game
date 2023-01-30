@@ -85,7 +85,7 @@ function setup() {
 
     bkg_color = color(100, 200, 200);
 
-    levels = ["books", "jars", "plate", "kitchen"];
+    levels = ["books", "jars", "plate", "kitchen", "cabinet"];
 
     levelSelectTitle = createP("Select Level");
     
@@ -108,6 +108,7 @@ function setup() {
     levelSelect.option("Jars", "jars");
     levelSelect.option("Plate", "plate");
     levelSelect.option("Kitchen", "kitchen");
+    levelSelect.option("Cabinet", "cabinet");
     
     levelSelect.changed(() => {
         let index = levels.indexOf(levelSelect.selected());
@@ -115,7 +116,7 @@ function setup() {
         level.init();
     });
 
-    level = createLevel(levels[0]);
+    level = createLevel("cabinet");
     level.init();
 }
 
@@ -258,6 +259,7 @@ function createLevel(levelName) {
         case "jars": return new Cans(_center.x, _center.y);
         case "plate": return new Plate(_center.x, _center.y);
         case "kitchen": return new Kitchen(_center.x, _center.y);
+        case "cabinet": return new Cabinet(_center.x, _center.y);
     }
 }
 
