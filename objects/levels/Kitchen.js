@@ -108,30 +108,6 @@ class KnifeBlock extends Rect {
     }
 }
 
-class Img extends Rect {
-    constructor(x, y, p5img) {
-        super(x, y, p5img.width, p5img.height);
-        this.pos = createVector(x, y);
-        this.image = p5img;
-        this.hovered = false;
-    }
-
-    handleDrag(delta) {
-        this.pos.add(delta);
-    }
-
-    draw() {
-        push();
-        translate(this.pos.x, this.pos.y);
-        rectMode(CENTER);
-        noStroke();
-        noFill();
-        rect(0, 0, this.w, this.h);
-        image(this.image, -this.w/2, -this.h/2);
-        pop();
-    }
-}
-
 class Handle extends Rect {
     constructor(x, y, w, h, hasHole) {
         super(x, y, w, h);

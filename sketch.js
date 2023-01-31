@@ -39,6 +39,12 @@ let slottedSpatulaOutline;
 let spiderOutline;
 let whiskOutline;
 
+let jar;
+let paprikaJar;
+let garlicPowderJar;
+let oreganoJar;
+let saltJar;
+
 function preload() {
     // sounds
     soundFormats("mp3");
@@ -73,6 +79,12 @@ function preload() {
     servingSpoonOutline = loadImage("images/kitchen/serving-spoon-outline.png");
     slottedSpatulaOutline = loadImage("images/kitchen/slotted-spatula-outline.png");
     spiderOutline = loadImage("images/kitchen/spider-outline.png");
+
+    jar = loadImage("images/kitchen/jar.png");
+    paprikaJar = loadImage("images/kitchen/paprika-jar.png");
+    garlicPowderJar = loadImage("images/kitchen/garlic-powder-jar.png");
+    oreganoJar = loadImage("images/kitchen/oregano-jar.png");
+    saltJar = loadImage("images/kitchen/salt-jar.png");
 }
 
 function setup() {
@@ -117,6 +129,7 @@ function setup() {
     });
 
     level = createLevel("cabinet");
+    // level = createLevel(levels[0]);
     level.init();
 }
 
